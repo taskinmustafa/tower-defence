@@ -36,7 +36,29 @@ fn spawn_point_lights(
                 shadows_enabled: true,
                 ..default()
             },
-            transform: Transform::from_xyz(0.0, 5.0, 0.0),
+            transform: Transform::from_xyz(2.0, 5.0, -5.0),
+            ..default()
+        }
+    );
+    commands.spawn( //Point light
+        PointLightBundle{
+            point_light: PointLight {
+                intensity: 1000.0,
+                shadows_enabled: true,
+                ..default()
+            },
+            transform: Transform::from_xyz(1.0, 5.0, -1.0),
+            ..default()
+        }
+    );
+    commands.spawn( //Point light
+        PointLightBundle{
+            point_light: PointLight {
+                intensity: 1000.0,
+                shadows_enabled: true,
+                ..default()
+            },
+            transform: Transform::from_xyz(3.0, 5.0, -1.0),
             ..default()
         }
     );
