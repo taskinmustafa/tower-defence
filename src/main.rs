@@ -12,39 +12,23 @@ fn main() {
     }))
     .add_plugin(WorldInspectorPlugin::new())
     .add_startup_system(spawn_camera)
-    .add_startup_system(spawn_basic_scene)
+    .add_startup_system(spawn_glb_scene)
+    .add_startup_system(spawn_point_lights)
     .run();
 }
 
 fn spawn_camera(mut commands: Commands) {
     commands.spawn(
         Camera3dBundle {
-            transform: Transform::from_xyz(2.0, 2.5, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
+            transform: Transform::from_xyz(7.0, 5.0, -7.0).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         }
     );
 }
 
-fn spawn_basic_scene(
+fn spawn_point_lights(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>
 ){
-    commands.spawn( //Plane
-        PbrBundle{
-            mesh: meshes.add(Mesh::from(shape::Plane{size: 5.0,subdivisions: 8})),
-            material: materials.add(Color::rgb(0.5, 0.1, 0.7).into()),
-            ..default()
-        }
-    );
-    commands.spawn( //Torus
-        PbrBundle{
-            mesh: meshes.add(Mesh::from(shape::Torus{radius: 1.0,ring_radius: 0.4,subdivisions_segments: 32, subdivisions_sides: 16})),
-            material: materials.add(Color::rgb(0.1, 0.25, 0.85).into()),
-            transform: Transform::from_xyz(0.0, 0.4, 1.0),
-            ..default()
-        }
-    );
     commands.spawn( //Point light
         PointLightBundle{
             point_light: PointLight {
@@ -57,3 +41,16 @@ fn spawn_basic_scene(
         }
     );
 }
+
+fn spawn_glb_scene(
+    mut commands: Commands,
+    assets: Res<AssetServer>,
+){
+    let my_glb = assets.load("scene0.glb#Scene0");
+    commands.spawn(SceneBundle{
+        scene: my_glb,
+        transform: Transform::from_xyz(0.0, 0.0, 0.0),
+        ..Default::default()
+    });
+}
+
