@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 fn main() {
     App::new()
-    .insert_resource(ClearColor(Color::rgb(0.6, 0.2, 0.2)))
+    .insert_resource(ClearColor(Color::rgb(0.2, 0.2, 0.2)))
     .add_plugins(DefaultPlugins.set(WindowPlugin{
         primary_window: Some(Window {
             resizable: false,
@@ -17,7 +17,7 @@ fn main() {
 fn spawn_camera(mut commands: Commands) {
     commands.spawn(
         Camera3dBundle {
-            transform: Transform::from_xyz(0.0, 0.0, 500.0).looking_at(Vec3::ZERO, Vec3::Y),
+            transform: Transform::from_xyz(2.0, 2.5, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         }
     );
