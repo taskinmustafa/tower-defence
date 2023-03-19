@@ -28,10 +28,18 @@ fn spawn_basic_scene(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>
 ){
-    commands.spawn(
+    commands.spawn( //Plane
         PbrBundle{
             mesh: meshes.add(Mesh::from(shape::Plane{size: 5.0,subdivisions: 8})),
             material: materials.add(Color::rgb(0.5, 0.1, 0.7).into()),
+            ..default()
+        }
+    );
+    commands.spawn( //Torus
+        PbrBundle{
+            mesh: meshes.add(Mesh::from(shape::Torus{radius: 1.0,ring_radius: 0.4,subdivisions_segments: 32, subdivisions_sides: 16})),
+            material: materials.add(Color::rgb(0.1, 0.25, 0.85).into()),
+            transform: Transform::from_xyz(0.0, 0.4, 1.0),
             ..default()
         }
     );
