@@ -43,7 +43,7 @@ fn spawn_basic_scene(
             ..default()
         }
     );
-    commands.spawn(
+    commands.spawn( //Point light
         PointLightBundle{
             point_light: PointLight {
                 intensity: 1000.0,
