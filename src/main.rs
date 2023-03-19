@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 fn main() {
     App::new()
     .insert_resource(ClearColor(Color::rgb(0.2, 0.2, 0.2)))
@@ -9,6 +10,7 @@ fn main() {
         }),
         ..default()
     }))
+    .add_plugin(WorldInspectorPlugin::new())
     .add_startup_system(spawn_camera)
     .add_startup_system(spawn_basic_scene)
     .run();
