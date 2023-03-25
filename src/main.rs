@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use std::{time::Duration, f32::consts::PI};
 fn main() {
     App::new()
     .insert_resource(ClearColor(Color::rgb(0.2, 0.2, 0.2)))
@@ -14,6 +15,7 @@ fn main() {
     .add_startup_system(spawn_camera)
     .add_startup_system(spawn_glb_scene)
     .add_startup_system(spawn_point_lights)
+    .add_system(tower_shooting)
     .run();
 }
 
@@ -73,6 +75,41 @@ fn spawn_glb_scene(
         scene: my_glb,
         transform: Transform::from_xyz(0.0, 0.0, 0.0),
         ..Default::default()
+    })
+    .insert( Tower {
+        shooting_timer: Timer::from_seconds(1.0, TimerMode::Repeating)
     });
+
 }
 
+#[derive(Component)]
+pub struct Tower{
+    shooting_timer: Timer,
+}
+
+fn tower_shooting(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut towers: Query<&mut Tower>,
+    time: Res<Time>
+) {
+    for mut tower in &mut towers{
+        tower.shooting_timer.tick(time.delta());
+        if tower.shooting_timer.just_finished() {
+            let spawn_transform = 
+                Transform::from_xyz(1.0, 1.8, -0.1) //bullet spawn point
+                .with_rotation(Quat::from_rotation_x(-PI/2.0));
+            commands.
+                spawn(
+                    PbrBundle{
+                        mesh: meshes.add(Mesh::from(shape::Capsule { radius: 0.1, depth: 0.3, latitudes: 4, longitudes: 8, rings: 8, uv_profile: shape::CapsuleUvProfile::Aspect })),
+                        material: materials.add(Color::DARK_GRAY.into()),
+                        transform: spawn_transform,
+                        ..default()
+                    }
+                );
+        }
+    }
+    
+}
