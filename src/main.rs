@@ -16,6 +16,7 @@ fn main() {
     .add_startup_system(spawn_glb_scene)
     .add_startup_system(spawn_point_lights)
     .add_system(tower_shooting)
+    .add_system(bullet_despawn)
     .run();
 }
 
@@ -108,8 +109,30 @@ fn tower_shooting(
                         transform: spawn_transform,
                         ..default()
                     }
+                )
+                .insert(
+                    Lifetime{
+                        timer: Timer::from_seconds(0.5, TimerMode::Once)
+                    }
                 );
         }
     }
     
+}
+#[derive(Component)]
+pub struct Lifetime{
+    timer: Timer,
+}
+
+fn bullet_despawn(
+    mut commands: Commands,
+    mut bullets: Query<(Entity, &mut Lifetime)>,
+    time: Res<Time>
+) {
+    for (entity, mut bullet) in &mut bullets{
+        bullet.timer.tick(time.delta());
+        if bullet.timer.finished(){
+            commands.entity(entity).despawn_recursive();
+        }
+    }
 }
