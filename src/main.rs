@@ -12,59 +12,10 @@ fn main() {
         ..default()
     }))
     .add_plugin(WorldInspectorPlugin::new())
-    .add_startup_system(spawn_camera)
     .add_startup_system(spawn_glb_scene)
-    .add_startup_system(spawn_point_lights)
     .add_system(tower_shooting)
     .add_system(bullet_despawn)
     .run();
-}
-
-fn spawn_camera(mut commands: Commands) {
-    commands.spawn(
-        Camera3dBundle {
-            transform: Transform::from_xyz(7.0, 5.0, -7.0).looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        }
-    );
-}
-
-fn spawn_point_lights(
-    mut commands: Commands,
-){
-    commands.spawn( //Point light
-        PointLightBundle{
-            point_light: PointLight {
-                intensity: 1000.0,
-                shadows_enabled: true,
-                ..default()
-            },
-            transform: Transform::from_xyz(2.0, 5.0, -5.0),
-            ..default()
-        }
-    );
-    commands.spawn( //Point light
-        PointLightBundle{
-            point_light: PointLight {
-                intensity: 1000.0,
-                shadows_enabled: true,
-                ..default()
-            },
-            transform: Transform::from_xyz(1.0, 5.0, -1.0),
-            ..default()
-        }
-    );
-    commands.spawn( //Point light
-        PointLightBundle{
-            point_light: PointLight {
-                intensity: 1000.0,
-                shadows_enabled: true,
-                ..default()
-            },
-            transform: Transform::from_xyz(3.0, 5.0, -1.0),
-            ..default()
-        }
-    );
 }
 
 fn spawn_glb_scene(
